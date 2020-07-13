@@ -1,4 +1,4 @@
-using System;
+using DeveUnityLicenseActivator.CLI;
 using Xunit;
 
 namespace DeveUnityLicenseActivator.Tests
@@ -8,7 +8,9 @@ namespace DeveUnityLicenseActivator.Tests
         [Fact]
         public void Test1()
         {
+            var cli = new CLIOptions() { Email = "test@gmail.com", Password = "pwtest" };
 
+            Assert.NotNull(cli);
         }
     }
 }
