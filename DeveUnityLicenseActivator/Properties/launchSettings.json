@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "DeveUnityLicenseActivator": {
+      "commandName": "Project",
+      "commandLineArgs": "--email davydavidse@gmail.com --password hoi"
+    }
+  }
+}

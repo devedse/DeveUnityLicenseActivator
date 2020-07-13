@@ -1,0 +1,54 @@
+version: 1.0.{build}
+os: Visual Studio 2019
+skip_tags: true
+configuration: Release
+
+environment:
+  sonarqubetoken:
+    secure: ppdeirHI9dsM7NpQgtwIRqXbiqhJZvIyHxOFhnME5HhRFS6IbYZqRppQi7fTqv37
+
+before_build:
+  - ps: .\scripts\set-version.ps1
+  - dotnet --info
+  - dotnet restore
+  - dotnet tool install --global dotnet-reportgenerator-globaltool
+  #- choco install opencover.portable
+  - choco install codecov
+  #- choco install xunit
+  - choco install "msbuild-sonarqube-runner" -y
+  - choco install 7zip
+
+build_script:
+  - SonarScanner.MSBuild.exe begin /k:"DeveUnityLicenseActivator" /o:"devedse-github" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login=%sonarqubetoken% /d:sonar.cs.opencover.reportsPaths=".\DeveUnityLicenseActivator.Tests\TestResults\Coverage\coverage.opencover.xml" /d:sonar.coverage.exclusions="DeveUnityLicenseActivator.ConsoleApp/**/*.cs,DeveUnityLicenseActivator.Tests/**/*.cs"
+  - dotnet build -c Release
+  #- OpenCover.Console.exe -register:user -target:"dotnet.exe" -targetargs:"test .\DeveUnityLicenseActivator.Tests\DeveUnityLicenseActivator.Tests.csproj -c Release" -oldstyle -returntargetcode -output:.\DeveUnityLicenseActivator.Coverage.xml -filter:"+[DeveUnityLicenseActivator*]*"
+  - dotnet test --no-build -c Release /p:CollectCoverage=true /p:CoverletOutputFormat=\"cobertura,opencover\" /p:CoverletOutput=./TestResults/Coverage/
+  - SonarScanner.MSBuild.exe end /d:sonar.login=%sonarqubetoken%
+  - codecov -f ".\DeveUnityLicenseActivator.Tests\TestResults\Coverage\coverage.opencover.xml"
+  - reportgenerator -reports:.\DeveUnityLicenseActivator.Tests\TestResults\Coverage\coverage.opencover.xml -targetdir:.\DeveUnityLicenseActivator.Tests\TestResults\Coverage\HtmlInline\ -reporttypes:HtmlInline_AzurePipelines
+ 
+after_test:
+  - dotnet pack -c Release DeveUnityLicenseActivator\
+  - ps: Scripts\GoPackage.ps1
+  - 7z a -t7z -m0=LZMA2 -mmt=on -mx9 -md=1536m -mfb=273 -ms=on -mqs=on -sccUTF-8 "Scripts\Output\CodeCoverageReport.7z" ".\DeveUnityLicenseActivator.Tests\TestResults\Coverage\HtmlInline\*"
+
+artifacts:
+- path: Scripts\Output\DeveUnityLicenseActivator.7z
+  name: droppackage7z
+- path: Scripts\Output\DeveUnityLicenseActivator.zip
+  name: droppackagezip
+- path: 'DeveUnityLicenseActivator\bin\Release\*.nupkg'
+  name: nugetPackages
+- path: 'DeveUnityLicenseActivator\bin\Release\*.snupkg'
+  name: snugetPackages
+- path: Scripts\Output\CodeCoverageReport.7z
+  name: CodeCoverageReport
+
+deploy:
+- provider: GitHub
+  auth_token:
+    secure: do7S++r1rE5E3IZujCoMONsWYJNF7eoRoPyJbxSD851I850OlEq0gsHH/Tji7o00
+  artifact: droppackage7z,droppackagezip,nugetPackages,snugetPackages
+- provider: NuGet
+  api_key:
+    secure: pVOzQthQbu7P9SUQwjG43ZEMcwAp7dVbe4BkDVEwJFu1gWK+L11L9mdfGLC5iO5Z

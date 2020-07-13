@@ -1,0 +1,3 @@
+docker login
+docker push devedse/deveunitylicenseactivator:latest
+pause
