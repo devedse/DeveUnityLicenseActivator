@@ -17,9 +17,13 @@ $PSScriptFilePath = (Get-Item $MyInvocation.MyCommand.Path).FullName
 $ScriptDir = Split-Path -Path $PSScriptFilePath -Parent
 $SolutionRoot = Split-Path -Path $ScriptDir -Parent
 
-$csprojPath = Join-Path -Path $SolutionRoot -ChildPath "DeveUnityLicenseActivator\DeveUnityLicenseActivator.csproj"
 $re = [regex]"(?<=<Version>).*(?=<\/Version>)"
 
+$csprojPath = Join-Path -Path $SolutionRoot -ChildPath "DeveUnityLicenseActivator\DeveUnityLicenseActivator.csproj"
 Write-Host "Applying version $totalVersion to $csprojPath using regex $re"
+$re.Replace([string]::Join("`n", (Get-Content -Path $csprojPath)), "$totalVersion", 1) | Set-Content -Path $csprojPath -Encoding UTF8
  
+
+$csprojPath = Join-Path -Path $SolutionRoot -ChildPath "DeveUnityLicenseActivator.ConsoleApp\DeveUnityLicenseActivator.ConsoleApp.csproj"
+Write-Host "Applying version $totalVersion to $csprojPath using regex $re"
 $re.Replace([string]::Join("`n", (Get-Content -Path $csprojPath)), "$totalVersion", 1) | Set-Content -Path $csprojPath -Encoding UTF8
