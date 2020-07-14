@@ -29,7 +29,7 @@ build_script:
   - SonarScanner.MSBuild.exe end /d:sonar.login=%sonarqubetoken%
   - codecov -f ".\DeveUnityLicenseActivator.Tests\TestResults\Coverage\coverage.opencover.xml"
   - reportgenerator -reports:.\DeveUnityLicenseActivator.Tests\TestResults\Coverage\coverage.opencover.xml -targetdir:.\DeveUnityLicenseActivator.Tests\TestResults\Coverage\HtmlInline\ -reporttypes:HtmlInline_AzurePipelines
-  - cmd: dotnet publish -r win-x64 -c Release /p:PublishSingleFile=true /p:PublishTrimmed=true
+  - cmd: dotnet publish -r win-x64 -c Release /p:PublishSingleFile=true /p:PublishTrimmed=true DeveUnityLicenseActivator.ConsoleApp/DeveUnityLicenseActivator.ConsoleApp.csproj
 
 after_test:
   - dotnet pack -c Release DeveUnityLicenseActivator\
