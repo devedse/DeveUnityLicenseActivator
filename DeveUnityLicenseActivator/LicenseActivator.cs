@@ -1,12 +1,9 @@
 ﻿using DeveUnityLicenseActivator.CLI;
 using DeveUnityLicenseActivator.Config;
-using Newtonsoft.Json;
 using PuppeteerSharp;
 using PuppeteerSharp.Input;
 using System;
-using System.Collections.Generic;
 using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace DeveUnityLicenseActivator
