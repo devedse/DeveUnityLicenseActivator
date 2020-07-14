@@ -1,6 +1,22 @@
 # DeveUnityLicenseActivator
 A small application which makes use of Headless chrome to activate a personal unity license.
 
+**Command line arguments:**
+
+```
+  -e, --email          Required. Unity login email address.
+
+  -p, --password       Required. Unity login password.
+
+  -l, --licenseFile    Required. Unity .asl license file path.
+
+  -s, --showwindow     Shows the google chrome window (don't run headless).
+
+  --help               Display this help screen.
+
+  --version            Display version information.
+```
+
 ## Build status
 
 | Travis (Linux/Osx build) | AppVeyor (Windows build) | Github Actions (Windows and Linux build) |
