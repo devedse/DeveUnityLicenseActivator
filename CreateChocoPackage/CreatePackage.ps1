@@ -13,9 +13,9 @@ $SolutionRoot = Split-Path -Path $directorypath -Parent
 $powerShellHelpersModule = Join-Path $directorypath "PowerShellHelpers"
 Import-Module -Name $powerShellHelpersModule
 
-$fullPathFileToPackage = Join-Path $SolutionRoot $originalFile -Resolve
-Copy-Item $fullPathFileToPackage $fullPathFileToPackage
+$origFullFileToPackage = Join-Path $SolutionRoot $originalFile -Resolve
 $fullPathFileToPackage = Join-Path $SolutionRoot $fileToPackage -Resolve
+Copy-Item $origFullFileToPackage $fullPathFileToPackage
 $toolsDir = Join-Path $directorypath "tools"
 $templateDir = Join-Path $directorypath "templates"
 
