@@ -2,6 +2,7 @@
 using DeveUnityLicenseActivator.CLI;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Threading.Tasks;
 
 namespace DeveUnityLicenseActivator.ConsoleApp
@@ -21,9 +22,12 @@ namespace DeveUnityLicenseActivator.ConsoleApp
         public static async Task<int> RunOptionsAndReturnExitCode(CLIOptions opts)
         {
             var licenseActivator = new LicenseActivator();
-            await licenseActivator.Run(opts);
 
-            return 0;
+            opts.Password = File.ReadAllText(@"C:\XGitPrivate\pw.txt").Trim();
+
+            var exitCode = await licenseActivator.Run(opts);
+
+            return exitCode;
         }
 
         public static Task<int> HandleParseError(IEnumerable<Error> errs)

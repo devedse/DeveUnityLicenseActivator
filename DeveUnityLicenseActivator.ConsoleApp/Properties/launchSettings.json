@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "DeveUnityLicenseActivator.ConsoleApp": {
+      "commandName": "Project",
+      "commandLineArgs": "--email spamvedse@gmail.com --password aaaaaa --licenseFile \"C:\\XGitPrivate\\Unity_lic.alf\""
+    }
+  }
+}
