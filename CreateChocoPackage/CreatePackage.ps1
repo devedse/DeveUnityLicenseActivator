@@ -14,8 +14,9 @@ $powerShellHelpersModule = Join-Path $directorypath "PowerShellHelpers"
 Import-Module -Name $powerShellHelpersModule
 
 $origFullFileToPackage = Join-Path $SolutionRoot $originalFile -Resolve
+$tmpdest = Join-Path $SolutionRoot $fileToPackage
+Copy-Item $origFullFileToPackage $tmpdest
 $fullPathFileToPackage = Join-Path $SolutionRoot $fileToPackage -Resolve
-Copy-Item $origFullFileToPackage $fullPathFileToPackage
 $toolsDir = Join-Path $directorypath "tools"
 $templateDir = Join-Path $directorypath "templates"
 
