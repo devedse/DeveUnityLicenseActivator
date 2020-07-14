@@ -51,8 +51,6 @@ artifacts:
   name: snugetPackages
 - path: Scripts\Output\CodeCoverageReport.7z
   name: CodeCoverageReport
-- path: CreateChocoPackage\*.nupkg
-  name: chocopackage
 
 deploy:
 - provider: GitHub
