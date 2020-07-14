@@ -6,6 +6,8 @@ configuration: Release
 environment:
   sonarqubetoken:
     secure: ppdeirHI9dsM7NpQgtwIRqXbiqhJZvIyHxOFhnME5HhRFS6IbYZqRppQi7fTqv37
+  CHOCOLATEYKEY:
+    secure: FN8rbgEXxUUmIbLsYpsvaAMmTidJQEyNJMhgU+ggl4H/n2luoWRO+eitNbi6FYPI
 
 before_build:
   - ps: .\scripts\set-version.ps1
@@ -16,6 +18,7 @@ before_build:
   - choco install codecov
   #- choco install xunit
   - choco install "msbuild-sonarqube-runner" -y
+  - choco install checksum
   - choco install 7zip
 
 build_script:
@@ -26,23 +29,30 @@ build_script:
   - SonarScanner.MSBuild.exe end /d:sonar.login=%sonarqubetoken%
   - codecov -f ".\DeveUnityLicenseActivator.Tests\TestResults\Coverage\coverage.opencover.xml"
   - reportgenerator -reports:.\DeveUnityLicenseActivator.Tests\TestResults\Coverage\coverage.opencover.xml -targetdir:.\DeveUnityLicenseActivator.Tests\TestResults\Coverage\HtmlInline\ -reporttypes:HtmlInline_AzurePipelines
- 
+  - cmd: dotnet publish -r win-x64 -c Release /p:PublishSingleFile=true /p:PublishTrimmed=true
+
 after_test:
   - dotnet pack -c Release DeveUnityLicenseActivator\
   - ps: Scripts\GoPackage.ps1
   - 7z a -t7z -m0=LZMA2 -mmt=on -mx9 -md=1536m -mfb=273 -ms=on -mqs=on -sccUTF-8 "Scripts\Output\CodeCoverageReport.7z" ".\DeveUnityLicenseActivator.Tests\TestResults\Coverage\HtmlInline\*"
+  - ps: .\CreateChocoPackage\CreatePackage.ps1
+  - ps: .\CreateChocoPackage\PushPackage.ps1
 
 artifacts:
 - path: Scripts\Output\DeveUnityLicenseActivator.7z
   name: droppackage7z
 - path: Scripts\Output\DeveUnityLicenseActivator.zip
   name: droppackagezip
+- path: DeveUnityLicenseActivator.ConsoleApp\bin\Release\netcoreapp3.1\win-x64\publish\DeveUnityLicenseActivator.exe
+  name: droppackage
 - path: 'DeveUnityLicenseActivator\bin\Release\*.nupkg'
   name: nugetPackages
 - path: 'DeveUnityLicenseActivator\bin\Release\*.snupkg'
   name: snugetPackages
 - path: Scripts\Output\CodeCoverageReport.7z
   name: CodeCoverageReport
+- path: CreateChocoPackage\*.nupkg
+  name: chocopackage
 
 deploy:
 - provider: GitHub

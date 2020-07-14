@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2015/06/nuspec.xsd">
+  <metadata>
+    <id>deveunitylicenseactivator</id>
+    <version>1.0.101</version>
+    <title>DeveUnityLicenseActivator (Install)</title>
+    <authors>Devedse</authors>
+    <projectUrl>https://github.com/devedse/DeveUnityLicenseActivator</projectUrl>
+    <iconUrl>https://rawcdn.githack.com/devedse/DeveUnityLicenseActivator/dccc172d1ae724ec8f6a3777ad9fd790aa46ff8c/DeveUnityLicenseActivator.ConsoleApp/Icon.png</iconUrl>
+    <licenseUrl>https://github.com/devedse/DeveUnityLicenseActivator/blob/master/LICENSE</licenseUrl>
+    <requireLicenseAcceptance>true</requireLicenseAcceptance>
+    <tags>deveunitylicenseactivator activate license unity</tags>
+    <summary>This is a tool can be used to activate a personal license for Unity with the command line.</summary>
+    <description>This is a tool can be used to activate a personal license for Unity with the command line. For example: unitylicenseactivator.exe --email testuser@gmail.com --password blahblah --licenseFile "C:\License.alf"</description>
+    <releaseNotes>https://github.com/devedse/DeveUnityLicenseActivator/releases</releaseNotes>
+  </metadata>
+  <files>
+    <file src="tools\**" target="tools" />
+  </files>
+</package>
