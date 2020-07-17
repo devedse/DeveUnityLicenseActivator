@@ -24,7 +24,7 @@ namespace DeveUnityLicenseActivator
 
             var slowerTypeOptions = new TypeOptions()
             {
-                Delay = 500
+                Delay = 5
             };
 
             Console.WriteLine("Downloading browser");
@@ -45,6 +45,8 @@ namespace DeveUnityLicenseActivator
                 Args = args,
             });
 
+            Console.WriteLine("Opening page...");
+
             var page = await browser.NewPageAsync();
             await page.SetViewportAsync(new ViewPortOptions() { Width = 1280, Height = 1024 });
             await page.GoToAsync(Constants.UnityLicenseUrl);
@@ -54,6 +56,7 @@ namespace DeveUnityLicenseActivator
                 //Login
                 await page.WaitForSelectorAsync("#conversations_create_session_form_email");
                 await page.WaitForSelectorAsync("#conversations_create_session_form_password");
+                Console.WriteLine("Logging in...");
 
                 await page.TypeAsync("#conversations_create_session_form_email", cliOptions.Email, slowerTypeOptions);
                 await page.TypeAsync("#conversations_create_session_form_password", cliOptions.Password, slowerTypeOptions);
@@ -62,6 +65,7 @@ namespace DeveUnityLicenseActivator
 
                 //Upload file
                 await page.WaitForSelectorAsync("#licenseFile");
+                Console.WriteLine("Uploading file...");
 
                 var fileChooserTask = page.WaitForFileChooserAsync();
                 await page.ClickAsync("#licenseFile");
@@ -74,6 +78,7 @@ namespace DeveUnityLicenseActivator
 
                 //Activate your license
                 var unityPersonalEditionButton = await page.WaitForSelectorAsync("label[for='type_personal']");
+                Console.WriteLine("Selecting edition...");
 
                 await unityPersonalEditionButton.ClickAsync();
 
@@ -85,6 +90,7 @@ namespace DeveUnityLicenseActivator
 
                 //Download license file
                 await page.WaitForSelectorAsync("input[value='Download license file']");
+                Console.WriteLine("Downloading license file...");
 
                 var downloadManager = new DownloadManager(Directory.GetCurrentDirectory());
                 await downloadManager.SetupPageAsync(page);
@@ -97,9 +103,9 @@ namespace DeveUnityLicenseActivator
                 var xmlData = data["xml"].ToString();
                 var fileName = data["name"].ToString();
 
-                File.WriteAllText("License.ulf", xmlData);
+                File.WriteAllText("Unity_lic.ulf", xmlData);
 
-                Console.WriteLine($"File 'License.ulf' created. Size: {new FileInfo("License.ulf").Length}");
+                Console.WriteLine($"File 'Unity_lic.ulf' created. Size: {new FileInfo("Unity_lic.ulf").Length}");
                 return 0;
             }
             catch (Exception ex)
