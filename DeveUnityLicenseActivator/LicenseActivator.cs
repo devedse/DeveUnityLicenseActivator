@@ -1,5 +1,6 @@
 ﻿using DeveUnityLicenseActivator.CLI;
 using DeveUnityLicenseActivator.Config;
+using DeveVipAccess;
 using PuppeteerSharp;
 using PuppeteerSharp.Input;
 using System;
@@ -64,6 +65,23 @@ namespace DeveUnityLicenseActivator
                         await page.TypeAsync("#conversations_create_session_form_password", cliOptions.Password, slowerTypeOptions);
 
                         await page.ClickAsync("#new_conversations_create_session_form input[value='Sign in']");
+
+                        await page.WaitForExpressionAsync("document.querySelectorAll('#conversations_tfa_required_form_verify_code, #licenseFile').length");
+
+                        var twoFactorBox = await page.QuerySelectorAsync("#conversations_tfa_required_form_verify_code");
+
+                        if (twoFactorBox != null)
+                        {
+                            //2fa
+                            Console.WriteLine("Logging in using 2fa...");
+
+                            var code = VipAccess.CreateCurrentTotpKey(cliOptions.Secret2fa);
+                            Console.WriteLine($"Using code: {code}");
+
+                            await twoFactorBox.TypeAsync(code, slowerTypeOptions);
+
+                            await page.ClickAsync("input[value='Verify']");
+                        }
 
                         //Upload file
                         await page.WaitForSelectorAsync("#licenseFile");
