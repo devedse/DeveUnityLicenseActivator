@@ -23,7 +23,7 @@ namespace DeveUnityLicenseActivator.ConsoleApp
         {
             var licenseActivator = new LicenseActivator();
 
-            opts.Password = File.ReadAllText(@"C:\XGitPrivate\pw.txt").Trim();
+            //opts.Password = File.ReadAllText(@"C:\XGitPrivate\pw.txt").Trim();
 
             var exitCode = await licenseActivator.Run(opts);
 

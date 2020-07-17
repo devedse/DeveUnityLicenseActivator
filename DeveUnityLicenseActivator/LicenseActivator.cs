@@ -24,7 +24,7 @@ namespace DeveUnityLicenseActivator
 
             var slowerTypeOptions = new TypeOptions()
             {
-                Delay = 5
+                Delay = 500
             };
 
             Console.WriteLine("Downloading browser");
