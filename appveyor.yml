@@ -59,4 +59,4 @@ deploy:
   artifact: droppackage7z,droppackagezip,droppackage,nugetPackages,snugetPackages
 - provider: NuGet
   api_key:
-    secure: pVOzQthQbu7P9SUQwjG43ZEMcwAp7dVbe4BkDVEwJFu1gWK+L11L9mdfGLC5iO5Z
+    secure: yn/mrAhI3d7pFIoQ1vq47HzefErGoBMS0FT/307naVrZ+B+fuGVI9O5hO5jJ2jcD
