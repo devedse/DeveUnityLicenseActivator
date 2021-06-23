@@ -3,6 +3,7 @@ using DeveUnityLicenseActivator.CLI;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace DeveUnityLicenseActivator.ConsoleApp
@@ -11,6 +12,8 @@ namespace DeveUnityLicenseActivator.ConsoleApp
     {
         public static async Task<int> Main(string[] args)
         {
+            Console.WriteLine($"DeveUnityLicenseActivator version: ${Assembly.GetExecutingAssembly().GetName().Version}");
+
             var result = await Parser.Default.ParseArguments<CLIOptions>(args).MapResult((opts) =>
                 RunOptionsAndReturnExitCode(opts),
                 errs => HandleParseError(errs));
