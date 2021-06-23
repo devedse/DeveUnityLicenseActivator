@@ -5,6 +5,7 @@ using PuppeteerSharp;
 using PuppeteerSharp.Input;
 using System;
 using System.IO;
+using System.Reflection;
 using System.Threading.Tasks;
 
 namespace DeveUnityLicenseActivator
@@ -133,7 +134,10 @@ namespace DeveUnityLicenseActivator
                         Console.WriteLine($"Error: {ex}");
                         var ssstream = await page.ScreenshotStreamAsync();
 
-                        using (var fileStream = File.Create("error.png"))
+                        var curDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+                        var outputFile = Path.Combine(curDir, "error.png");
+
+                        using (var fileStream = File.Create(outputFile))
                         {
                             ssstream.Seek(0, SeekOrigin.Begin);
                             ssstream.CopyTo(fileStream);
