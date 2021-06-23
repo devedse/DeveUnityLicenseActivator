@@ -137,11 +137,13 @@ namespace DeveUnityLicenseActivator
                         var curDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
                         var outputFile = Path.Combine(curDir, "error.png");
 
+                        Console.WriteLine($"Writing error screenshot to: {outputFile}");
                         using (var fileStream = File.Create(outputFile))
                         {
                             ssstream.Seek(0, SeekOrigin.Begin);
                             ssstream.CopyTo(fileStream);
                         }
+                        Console.WriteLine($"Done writing error screenshot to: {outputFile}");
                         return 1;
                     }
                 }
