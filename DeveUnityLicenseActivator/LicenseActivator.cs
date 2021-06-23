@@ -5,6 +5,7 @@ using DeveVipAccess;
 using PuppeteerSharp;
 using PuppeteerSharp.Input;
 using System;
+using System.Diagnostics;
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -142,7 +143,7 @@ namespace DeveUnityLicenseActivator
                         Console.WriteLine($"Error: {ex}");
                         var ssstream = await page.ScreenshotStreamAsync();
 
-                        var curDir = Path.GetDirectoryName(Assembly.GetExecutingAssembly().Location);
+                        var curDir = Path.GetDirectoryName(Process.GetCurrentProcess().MainModule.FileName);
                         var outputFile = Path.Combine(curDir, "error.png");
 
                         Console.WriteLine($"Writing error screenshot to: {outputFile}");
