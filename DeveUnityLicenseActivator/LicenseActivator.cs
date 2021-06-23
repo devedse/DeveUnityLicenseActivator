@@ -65,8 +65,10 @@ namespace DeveUnityLicenseActivator
                         Console.WriteLine("Logging in...");
 
                         await Task.Delay(500);
-                        await page.TypeAsync("#conversations_create_session_form_email", cliOptions.Email, slowerTypeOptions);
-                        await page.TypeAsync("#conversations_create_session_form_password", cliOptions.Password, slowerTypeOptions);
+                        //await page.TypeAsync("#conversations_create_session_form_email", cliOptions.Email, slowerTypeOptions);
+                        //await page.TypeAsync("#conversations_create_session_form_password", cliOptions.Password, slowerTypeOptions);
+                        await page.EvaluateExpressionAsync($"document.querySelector('#conversations_create_session_form_email').value = \"{cliOptions.Email}\"");
+                        await page.EvaluateExpressionAsync($"document.querySelector('#conversations_create_session_form_password').value = \"{cliOptions.Password}\"");
 
                         await page.ClickAsync("#new_conversations_create_session_form input[value='Sign in']");
 
@@ -85,7 +87,8 @@ namespace DeveUnityLicenseActivator
                             var code = VipAccess.CreateCurrentTotpKey(cliOptions.Secret2fa);
                             Console.WriteLine($"Using code: {code}");
 
-                            await twoFactorBox.TypeAsync(code, slowerTypeOptions);
+                            //await twoFactorBox.TypeAsync(code, slowerTypeOptions);
+                            await page.EvaluateExpressionAsync($"document.querySelector('#conversations_tfa_required_form_verify_code').value = \"{code}\"");
 
                             await page.ClickAsync("input[value='Verify']");
                         }
