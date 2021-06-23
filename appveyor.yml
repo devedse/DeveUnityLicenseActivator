@@ -22,11 +22,11 @@ before_build:
   - choco install 7zip
 
 build_script:
-  - SonarScanner.MSBuild.exe begin /k:"DeveUnityLicenseActivator" /o:"devedse-github" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login=%sonarqubetoken% /d:sonar.cs.opencover.reportsPaths=".\DeveUnityLicenseActivator.Tests\TestResults\Coverage\coverage.opencover.xml" /d:sonar.coverage.exclusions="DeveUnityLicenseActivator.ConsoleApp/**/*.cs,DeveUnityLicenseActivator.Tests/**/*.cs"
+  #- SonarScanner.MSBuild.exe begin /k:"DeveUnityLicenseActivator" /o:"devedse-github" /d:sonar.host.url="https://sonarcloud.io" /d:sonar.login=%sonarqubetoken% /d:sonar.cs.opencover.reportsPaths=".\DeveUnityLicenseActivator.Tests\TestResults\Coverage\coverage.opencover.xml" /d:sonar.coverage.exclusions="DeveUnityLicenseActivator.ConsoleApp/**/*.cs,DeveUnityLicenseActivator.Tests/**/*.cs"
   - dotnet build -c Release
   #- OpenCover.Console.exe -register:user -target:"dotnet.exe" -targetargs:"test .\DeveUnityLicenseActivator.Tests\DeveUnityLicenseActivator.Tests.csproj -c Release" -oldstyle -returntargetcode -output:.\DeveUnityLicenseActivator.Coverage.xml -filter:"+[DeveUnityLicenseActivator*]*"
   - dotnet test --no-build -c Release /p:CollectCoverage=true /p:CoverletOutputFormat=\"cobertura,opencover\" /p:CoverletOutput=./TestResults/Coverage/
-  - SonarScanner.MSBuild.exe end /d:sonar.login=%sonarqubetoken%
+  #- SonarScanner.MSBuild.exe end /d:sonar.login=%sonarqubetoken%
   - codecov -f ".\DeveUnityLicenseActivator.Tests\TestResults\Coverage\coverage.opencover.xml"
   - reportgenerator -reports:.\DeveUnityLicenseActivator.Tests\TestResults\Coverage\coverage.opencover.xml -targetdir:.\DeveUnityLicenseActivator.Tests\TestResults\Coverage\HtmlInline\ -reporttypes:HtmlInline_AzurePipelines
   - cmd: dotnet publish -r win-x64 -c Release /p:PublishSingleFile=true /p:PublishTrimmed=true DeveUnityLicenseActivator.ConsoleApp/DeveUnityLicenseActivator.ConsoleApp.csproj
