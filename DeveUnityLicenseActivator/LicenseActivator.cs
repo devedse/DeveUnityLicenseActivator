@@ -69,7 +69,7 @@ namespace DeveUnityLicenseActivator
 
                         await page.ClickAsync("#new_conversations_create_session_form input[value='Sign in']");
 
-                        await page.WaitForExpressionAsync("document.querySelectorAll('#conversations_tfa_required_form_verify_code, #licenseFile').length || document.querySelectorAll(\"button[name='conversations_accept_updated_tos_form[accept]'\")");
+                        await page.WaitForExpressionAsync("document.querySelectorAll('#conversations_tfa_required_form_verify_code, #licenseFile').length > 0 || document.querySelectorAll(\"button[name='conversations_accept_updated_tos_form[accept]'\").length > 0");
                         //await page.WaitForAnySelectors(null, "#conversations_accept_updated_tos_form[accept]", "document.querySelectorAll('#conversations_tfa_required_form_verify_code, #licenseFile').length");
 
                         await AcceptTosIfRequired(page);
@@ -89,6 +89,7 @@ namespace DeveUnityLicenseActivator
                             await page.ClickAsync("input[value='Verify']");
                         }
 
+                        await page.WaitForExpressionAsync("document.querySelectorAll('#licenseFile').length > 0 || document.querySelectorAll(\"button[name='conversations_accept_updated_tos_form[accept]'\").length > 0");
                         await AcceptTosIfRequired(page);
 
                         //Upload file
