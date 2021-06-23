@@ -1,5 +1,6 @@
 ﻿using DeveUnityLicenseActivator.CLI;
 using DeveUnityLicenseActivator.Config;
+using DeveUnityLicenseActivator.Helpers;
 using DeveVipAccess;
 using PuppeteerSharp;
 using PuppeteerSharp.Input;
@@ -62,12 +63,16 @@ namespace DeveUnityLicenseActivator
                         await page.WaitForSelectorAsync("#conversations_create_session_form_password");
                         Console.WriteLine("Logging in...");
 
+                        await Task.Delay(500);
                         await page.TypeAsync("#conversations_create_session_form_email", cliOptions.Email, slowerTypeOptions);
                         await page.TypeAsync("#conversations_create_session_form_password", cliOptions.Password, slowerTypeOptions);
 
                         await page.ClickAsync("#new_conversations_create_session_form input[value='Sign in']");
 
-                        await page.WaitForExpressionAsync("document.querySelectorAll('#conversations_tfa_required_form_verify_code, #licenseFile').length");
+                        await page.WaitForExpressionAsync("document.querySelectorAll('#conversations_tfa_required_form_verify_code, #licenseFile').length || document.querySelectorAll(\"button[name='conversations_accept_updated_tos_form[accept]'\")");
+                        //await page.WaitForAnySelectors(null, "#conversations_accept_updated_tos_form[accept]", "document.querySelectorAll('#conversations_tfa_required_form_verify_code, #licenseFile').length");
+
+                        await AcceptTosIfRequired(page);
 
                         var twoFactorBox = await page.QuerySelectorAsync("#conversations_tfa_required_form_verify_code");
 
@@ -83,6 +88,8 @@ namespace DeveUnityLicenseActivator
 
                             await page.ClickAsync("input[value='Verify']");
                         }
+
+                        await AcceptTosIfRequired(page);
 
                         //Upload file
                         await page.WaitForSelectorAsync("#licenseFile");
@@ -147,6 +154,21 @@ namespace DeveUnityLicenseActivator
                         return 1;
                     }
                 }
+            }
+        }
+
+        private static async Task AcceptTosIfRequired(Page page)
+        {
+            //*[@id="new_conversations_accept_updated_tos_form"]/div[2]/button[1]
+
+            //Unity has made updates
+            var acceptButton = await page.QuerySelectorAsync("button[name='conversations_accept_updated_tos_form[accept]'");
+
+            if (acceptButton != null)
+            {
+                Console.WriteLine("Accepting terms");
+
+                await acceptButton.ClickAsync();
             }
         }
     }

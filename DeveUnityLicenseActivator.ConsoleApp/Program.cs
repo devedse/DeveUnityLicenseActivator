@@ -12,7 +12,7 @@ namespace DeveUnityLicenseActivator.ConsoleApp
     {
         public static async Task<int> Main(string[] args)
         {
-            Console.WriteLine($"DeveUnityLicenseActivator version: ${Assembly.GetExecutingAssembly().GetName().Version}");
+            Console.WriteLine($"DeveUnityLicenseActivator version: {Assembly.GetExecutingAssembly().GetName().Version}");
 
             var result = await Parser.Default.ParseArguments<CLIOptions>(args).MapResult((opts) =>
                 RunOptionsAndReturnExitCode(opts),
@@ -26,7 +26,11 @@ namespace DeveUnityLicenseActivator.ConsoleApp
         {
             var licenseActivator = new LicenseActivator();
 
-            //opts.Password = File.ReadAllText(@"C:\XGitPrivate\pw.txt").Trim();
+            var debugFilePasswordPath = @"C:\XGitPrivate\pw.txt";
+            if (string.IsNullOrWhiteSpace(opts.Password) && File.Exists(debugFilePasswordPath))
+            {
+                opts.Password = File.ReadAllText(debugFilePasswordPath).Trim();
+            }
 
             var exitCode = await licenseActivator.Run(opts);
 
